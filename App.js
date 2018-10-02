@@ -61,7 +61,13 @@ const reduce = (state = defaultState, action) => {
             };
         case ('ADDWORD'):
             return {
-                ...state
+                ...state, defaultArrWords: [{
+                    id: state.defaultArrWords.length + 1,
+                    en: action.en,
+                    vn: action.vn,
+                    memorized: false,
+                    isShow: false
+                }].concat(state.defaultArrWords)
             };
     }
     return state;

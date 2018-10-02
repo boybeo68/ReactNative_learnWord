@@ -28,6 +28,9 @@ class Main extends Component {
             type:'ADDWORD',
             en:this.state.en,
             vn:this.state.vn
+        });
+        this.props.dispatch({
+            type:'SHOWADDITEM'
         })
     }
     render() {
