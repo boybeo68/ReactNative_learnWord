@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 
 import {View, TouchableOpacity, Text} from 'react-native';
 import {connect} from 'react-redux'
+import {showAll, showMemoried, showNeedPracticle} from "../redux/actionCreators";
 
 // import styles from './styles';
 
@@ -10,9 +11,6 @@ class Filter extends Component {
         const {filter} = this.props;
         if (filter === filterAction) return {color: '#ebff7d', fontWeight: 'bold', fontSize: 20};
         return {color: '#fff'}
-    };
-    senActionButton(actionType){
-        this.props.dispatch({type:actionType});
     };
     render() {
         return (
@@ -23,17 +21,17 @@ class Filter extends Component {
                 justifyContent: 'space-around',
                 backgroundColor: '#cb8b2c'
             }}>
-                <TouchableOpacity onPress={()=>this.senActionButton('FILTER_ShowAll')}>
+                <TouchableOpacity onPress={()=>this.props.showAll()}>
                     <Text style={this.getStyleButton('ShowAll')}>
                         Show all
                     </Text>
                 </TouchableOpacity>
-                <TouchableOpacity onPress={()=>this.senActionButton('FILTER_Memoried')} >
+                <TouchableOpacity onPress={()=>this.props.showMemoried()} >
                     <Text style={this.getStyleButton('Memoried')}>
                         Memoried
                     </Text>
                 </TouchableOpacity>
-                <TouchableOpacity onPress={()=>this.senActionButton('FILTER_NeedPractice')} >
+                <TouchableOpacity onPress={()=>this.props.showNeedPracticle()} >
                     <Text style={this.getStyleButton('NeedPractice')}>
                         Need Practice
                     </Text>
@@ -47,4 +45,4 @@ function mapStateToProp(state) {
     return {filter: state.filter}
 }
 
-export default connect(mapStateToProp)(Filter)
+export default connect(mapStateToProp,{showAll, showMemoried, showNeedPracticle})(Filter)

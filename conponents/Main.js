@@ -5,6 +5,7 @@ import {connect} from 'react-redux'
 import Word_Item from './WordI_Item'
 import Filter from './Filter'
 import {Icon, Button, Fab} from 'native-base';
+import {showAddItem, addWord} from '../redux/actionCreators'
 
 // import styles from './styles';
 class Main extends Component {
@@ -13,40 +14,39 @@ class Main extends Component {
         this.state = {
             active: 'true',
             modalVisible: false,
-            en:'',
-            vn:'',
+            en: '',
+            vn: '',
         };
     }
+
     getDataArray() {
         const {filter, defaultArrWords} = this.props;
         if (filter === 'ShowAll') return defaultArrWords;
         if (filter === 'Memoried') return defaultArrWords.filter(item => item.memorized);
         if (filter === 'NeedPractice') return defaultArrWords.filter(item => !item.memorized);
     };
-    addItem(){
-        this.props.dispatch({
-            type:'ADDWORD',
-            en:this.state.en,
-            vn:this.state.vn
-        });
-        this.props.dispatch({
-            type:'SHOWADDITEM'
-        })
-    }
+
     render() {
+        const {en, vn} = this.state;
         return (
             <View style={{flex: 1, backgroundColor: '#F5F5F5',}}>
                 {this.props.isAdding ? <View
                     style={{flexDirection: 'column', backgroundColor: '#FEFEFE', justifyContent: 'center', margin: 30}}>
-                    <TextInput placeholder='inseart Englist' style={{padding: 10, margin: 10}} onChangeText={text => this.setState({en:text})}>
+                    <TextInput placeholder='insert Englist' style={{padding: 10, margin: 10}}
+                               onChangeText={text => this.setState({en: text})}>
                     </TextInput>
-                    <TextInput placeholder='inseart VietNamese' style={{padding: 10, margin: 10}} onChangeText={text => this.setState({vn:text})}>
+                    <TextInput placeholder='insert VietNamese' style={{padding: 10, margin: 10}}
+                               onChangeText={text => this.setState({vn: text})}>
                     </TextInput>
                     <TouchableOpacity>
-                        <Text style={{textAlign: 'center'}} onPress={()=>{this.addItem()}}>Add</Text>
+                        <View>
+                            <Text style={{textAlign: 'center'}} onPress={() => {
+                                this.props.addWord(en, vn)
+                            }}>Add</Text>
+                        </View>
                     </TouchableOpacity>
 
-                </View> : null }
+                </View> : null}
                 <View style={{flex: 10}}>
                     <FlatList data={this.getDataArray()}
                               renderItem={({item}) => <Word_Item word={item}/>}
@@ -59,7 +59,7 @@ class Main extends Component {
                     style={{backgroundColor: '#cb8b2c', marginBottom: 50}}
                     position="bottomRight"
                     onPress={() => {
-                        this.props.dispatch({type:'SHOWADDITEM'})
+                        this.props.addWord()
                     }}>
                     <Icon name="ios-add"/>
                 </Fab>
@@ -73,4 +73,4 @@ function mapStateToProps(state) {
     return {filter: state.filter, defaultArrWords: state.defaultArrWords, isAdding: state.isAdding}
 }
 
-export default connect(mapStateToProps)(Main)
+export default connect(mapStateToProps, {showAddItem, addWord})(Main)
